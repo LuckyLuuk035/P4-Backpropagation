@@ -15,28 +15,6 @@ class Neuron:
     def __str__(self):
         return self.msg
 
-    def update(self, truthtable, epochs=25, show=False):
-        for i in range(epochs):
-            for row in truthtable:
-                y = row[0]  # true value / target
-                x = row[1]  # input
-
-                z = self.activate(x)  # output
-                a = self.sigmoid_function(z)
-                self.error = (z * (1 - z)) * -(y - z)
-
-
-                # self.cost += c**2
-                # CtoAl = 2 * (a - y)
-                # self.msg += "    t:   " + str(y)
-
-                if show:
-                    print(self)
-                elif i + 1 == epochs:
-                    print(self)
-        # self.cost = self.cost / epochs
-        # print(self.cost)
-
     def activate(self, event):
         self.msg = ""
         som = 0
@@ -50,3 +28,25 @@ class Neuron:
 
     def sigmoid_function(self, z):
         return 1 / (1 + self.e ** -z)  # a
+
+    # def update(self, truthtable, epochs=25, show=False):
+    #     for i in range(epochs):
+    #         for row in truthtable:
+    #             y = row[0]  # true value / target
+    #             x = row[1]  # input
+    #
+    #             z = self.activate(x)  # output
+    #             a = self.sigmoid_function(z)
+    #             self.error = (z * (1 - z)) * -(y - z)
+    #
+    #
+    #             # self.cost += c**2
+    #             # CtoAl = 2 * (a - y)
+    #             # self.msg += "    t:   " + str(y)
+    #
+    #             if show:
+    #                 print(self)
+    #             elif i + 1 == epochs:
+    #                 print(self)
+    #     # self.cost = self.cost / epochs
+    #     # print(self.cost)
