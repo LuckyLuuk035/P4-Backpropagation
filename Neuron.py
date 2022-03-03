@@ -18,31 +18,35 @@ class Neuron:
     def update(self, truthtable, epochs=25, show=False):
         for i in range(epochs):
             for row in truthtable:
-                y = row[0]  # true value
+                y = row[0]  # true value / target
                 x = row[1]  # input
-                a = self.activate(x)  # output
 
-                e = y - a  # error
-                self.cost += e**2
+                z = self.activate(x)  # output
+                a = self.sigmoid_function(z)
+                self.error = (z * (1 - z)) * -(y - z)
 
-                CtoAl = 2 * (a - y)
-                AltoZl =
 
-                self.msg += "    t:   " + str(y)
+                # self.cost += c**2
+                # CtoAl = 2 * (a - y)
+                # self.msg += "    t:   " + str(y)
+
                 if show:
                     print(self)
                 elif i + 1 == epochs:
                     print(self)
-
-        self.cost = self.cost / epochs
-        print(self.cost)
+        # self.cost = self.cost / epochs
+        # print(self.cost)
 
     def activate(self, event):
         self.msg = ""
-        som = 0  # z
+        som = 0
         for i in range(len(self.w)):
+
             self.msg += "'" + str(event[i]) + "i " + str(self.w[i]) + "w" + "'  "
             som = som + event[i] * self.w[i]
         self.msg += str(self.b) + "b  "
-        sigmoid_function = 1 / (1 + self.e ** -(som + self.b))  # a
-        return sigmoid_function
+        z = som + self.b
+        return z
+
+    def sigmoid_function(self, z):
+        return 1 / (1 + self.e ** -z)  # a
