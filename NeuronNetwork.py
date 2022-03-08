@@ -1,6 +1,6 @@
 from NeuronLayer import NeuronLayer
 
-class PerceptronNetwork:
+class NeuronNetwork:
     def __init__(self, NetworkName):
         self.name = NetworkName
         self.layers = []
