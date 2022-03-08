@@ -4,25 +4,17 @@ from NeuronNetwork import NeuronNetwork
 import random
 
 
-n1 = Neuron("AND-gate")
-n1.b = random.uniform(-1, 1)
-n1.w = [random.uniform(-1, 1), random.uniform(-1, 1)]
+# onderstaande gegevens zijn op basis van de uitwerkingen van les 6.
+m = Neuron([1, 0], 0)
+n = Neuron([0, 1], 0)
 
-p2 = Neuron("OR-gate")
-p2.b = random.uniform(-1, 1)
-p2.w = [random.uniform(-1, 1), random.uniform(-1, 1)]
+o = Neuron([-0.5, 0.5], 1.5)
 
-# print("AND-gate")
-# n1.update([[0, [0, 0]], [0, [0, 1]], [0, [1, 0]],  [1, [1, 1]]], 30)
-# print("OR-gate")
-# p2.update([[0, [0, 0]], [1, [0, 1]], [1, [1, 0]], [1, [1, 1]]], 30)
+inputLayer = NeuronLayer([m, n])
+outputLater = NeuronLayer([o])
 
-nl1 = NeuronLayer("first layer")
+andGate = NeuronNetwork([inputLayer, outputLater])
+
+andGate.feed_forward([0, 0])
 
 
-n3 = Neuron("AND-gate")
-n3.b = 0.5
-n3.w = [0.3, 0.3]
-
-n3.errorOutput([0, 1], 1)
-print(n3)
