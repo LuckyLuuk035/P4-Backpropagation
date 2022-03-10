@@ -1,5 +1,3 @@
-from Neuron import Neuron
-
 class NeuronLayer:
     def __init__(self, neurons):
         self.neurons = {}

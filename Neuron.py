@@ -21,22 +21,3 @@ class Neuron:
 
     def sigmoid_function(self):
         return 1 / (1 + self.e ** -self.output)  # a
-
-    # def errorOutput(self, event, target):
-    #     # inputthing = self.sigmoid_function(event) * (1 - self.sigmoid_function(event))
-    #     outputthing = self.activate(event) * (1 - self.activate(event))
-    #     print(outputthing)
-    #     outputthing = outputthing * -(target - self.activate(event))
-    #     self.error = outputthing
-    #     print(outputthing)
-
-#     def activate(self, event):
-#         self.msg = ""
-#         som = 0
-#         for i in range(len(self.w)):
-#             self.msg += "'" + str(event[i]) + "i " + str(self.w[i]) + "w" + "'  "
-#             som = som + event[i] * self.w[i]
-#         self.msg += str(self.b) + "b  "
-#         z = som + self.b
-#         self.msg += "o " + str(z)
-#         return z
