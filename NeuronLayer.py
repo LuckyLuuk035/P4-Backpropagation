@@ -15,4 +15,3 @@ class NeuronLayer:
         for n in self.neurons:
             self.neurons[n] = n.activate(event)
             # loss: sigmoid_function on the result
-            self.loss = n.sigmoid_function()
