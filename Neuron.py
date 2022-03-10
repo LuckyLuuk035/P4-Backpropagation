@@ -9,15 +9,15 @@ class Neuron:
         self.a = None  # Error
 
     def __str__(self):
-        return "output:"
+        return "self.output:"
 
     def activate(self, event):
         som = 0
         for i in range(len(self.w)):
             som = som + event[i] * self.w[i]
-        output = som + self.b
-        self.sigmoid_function(output)
-        return output
+        self.output = som + self.b
+        self.sigmoid_function(self.output)
+        return self.output
 
     def sigmoid_function(self, result):
         # calculate the error

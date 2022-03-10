@@ -1,7 +1,6 @@
 class NeuronLayer:
     def __init__(self, neurons):
         self.neurons = {}
-        self.loss = 0
         for n in neurons:
             self.neurons[n] = None  # Value: output
         self.msg = ""
@@ -15,3 +14,12 @@ class NeuronLayer:
         for n in self.neurons:
             self.neurons[n] = n.activate(event)
             # loss: sigmoid_function on the result
+
+    def get_loss(self, index=None):
+        lst = []
+        if index:
+            lst.append(self.neurons[index].a)
+        else:
+            for n in self.neurons:
+                lst.append(n.a)
+        return lst
