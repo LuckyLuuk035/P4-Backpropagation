@@ -19,9 +19,9 @@ class Neuron:
         self.output = som + self.b
         return self.output
 
-    # def sigmoid_function(self, z):
-    #     return 1 / (1 + self.e ** -z)  # a
-    #
+    def sigmoid_function(self):
+        return 1 / (1 + self.e ** -self.output)  # a
+
     # def errorOutput(self, event, target):
     #     # inputthing = self.sigmoid_function(event) * (1 - self.sigmoid_function(event))
     #     outputthing = self.activate(event) * (1 - self.activate(event))
