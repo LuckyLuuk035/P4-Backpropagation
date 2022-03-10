@@ -18,7 +18,7 @@ class NeuronLayer:
     def get_loss(self, index=None):
         lst = []
         if index:
-            lst.append(self.neurons[index].a)
+            return self.neurons[index].a
         else:
             for n in self.neurons:
                 lst.append(n.a)

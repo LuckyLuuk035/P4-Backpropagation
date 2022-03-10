@@ -4,8 +4,9 @@ from NeuronLayer import NeuronLayer
 class NeuronNetwork:
     def __init__(self, layers):
         self.layers = layers
-        self.total_loss = 0
+        self.total_loss = 0  # this is not correct yet
         self.count = 0
+        self.error = None
         self.msg = ""
 
     def __str__(self):
@@ -24,8 +25,9 @@ class NeuronNetwork:
             self.feed_forward([list(self.layers[self.count-1].neurons.values()), event[1]])
         else:
             # Get the total loss of output layer
-            loss_lst = self.layers[-1].get_loss()
-            for loss in loss_lst:
-                self.total_loss += (event[1] - loss) ** 2
-            print(self.total_loss)
+            a = self.layers[-1].get_loss(0)  # haal hier de index weg van je voor de adder gaat.
+            
+            # for loss in loss_lst:
+            #     self.total_loss += (event[1] - loss) ** 2
+            # print(self.total_loss)
             self.count = 0
