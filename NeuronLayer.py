@@ -1,6 +1,7 @@
 class NeuronLayer:
     def __init__(self, neurons):
         self.neurons = {}
+        self.loss = 0
         for n in neurons:
             self.neurons[n] = None  # Value: output
         self.msg = ""
@@ -11,7 +12,7 @@ class NeuronLayer:
         return self.msg
 
     def activate(self, event):
-        # event[0]: input, event[1]: target
         for n in self.neurons:
-            self.neurons[n] = n.activate(event[0])
-            print(n.sigmoid_function(), (event[1] - n.sigmoid_function())**2)
+            self.neurons[n] = n.activate(event)
+            # loss: sigmoid_function on the result
+            self.loss = n.sigmoid_function()
