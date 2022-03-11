@@ -16,11 +16,11 @@ class NeuronLayer:
             self.neurons[n] = n.activate(event)
             # loss: sigmoid_function on the result
 
-    def get_loss(self, index=None):
+    def get_error(self, index=None):
         lst = []
         if index:
-            return self.neurons[index].a
+            return self.neurons[index].error
         else:
             for n in self.neurons:
-                lst.append(n.a)
+                lst.append(n.error)
         return lst
