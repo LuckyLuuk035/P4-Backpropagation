@@ -18,7 +18,7 @@ class NeuronNetwork:
     def feed_forward(self, event):
         # event[0]: input, event[1]: target
         # Activate layer
-        self.layers[self.count].activate(event[0])
+        self.layers[self.count].activate(event)
         self.count += 1
         if self.count < len(self.layers):
             # Go to next layer with values of layer before it.
@@ -26,7 +26,7 @@ class NeuronNetwork:
         else:
             # Get the total loss of output layer
             a = self.layers[-1].get_loss(0)  # haal hier de index weg van je voor de adder gaat.
-            
+
             # for loss in loss_lst:
             #     self.total_loss += (event[1] - loss) ** 2
             # print(self.total_loss)

@@ -6,19 +6,21 @@ class Neuron:
         self.w = weights
         self.b = bias
         self.e = 2.718281828459045
-        self.a = None  # Error
+        self.output = None
+        self.error = None
 
     def __str__(self):
-        return "self.output:"
+        return "output:"
 
     def activate(self, event):
+        # event[0]: input, event[1]: target
         som = 0
         for i in range(len(self.w)):
-            som = som + event[i] * self.w[i]
+            som = som + event[0][i] * self.w[i]
         self.output = som + self.b
-        self.sigmoid_function(self.output)
+        a = self.sigmoid_function(self.output)
+        self.error = a * (1 - a) * -(event[1]-a)
         return self.output
 
     def sigmoid_function(self, result):
-        # calculate the error
-        self.a = 1 / (1 + self.e ** -result)  # Error
+        return 1 / (1 + self.e ** -result)

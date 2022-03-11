@@ -11,6 +11,7 @@ class NeuronLayer:
         return self.msg
 
     def activate(self, event):
+        # event[0]: input, event[1]: target
         for n in self.neurons:
             self.neurons[n] = n.activate(event)
             # loss: sigmoid_function on the result
