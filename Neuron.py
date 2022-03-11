@@ -10,7 +10,7 @@ class Neuron:
         self.error = None
 
     def __str__(self):
-        return "output:"
+        return str(self.error)
 
     def activate(self, event):
         # event[0]: input, event[1]: target
