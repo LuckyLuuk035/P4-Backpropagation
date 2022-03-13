@@ -17,9 +17,9 @@ class NeuronNetwork:
         return self.msg
 
     def feed_forward(self, event):
+        # event[0]: input, event[1]: target
         if not self.startvalues:
             self.startvalues = event[0]
-        # event[0]: input, event[1]: target
         self.layers[self.count].activate(event)
         self.count += 1
         if self.count < len(self.layers):
@@ -44,6 +44,7 @@ class NeuronNetwork:
             gradient = output_i * o.error
             delta_lst.append(self.lr * gradient)
         delta_lst = [delta_lst, self.lr * o.error]
+        self.layers.reverse()
         # print(delta_lst)
         return delta_lst
 

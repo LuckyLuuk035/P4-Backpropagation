@@ -22,5 +22,8 @@ class Neuron:
         self.error = a * (1 - a) * -(event[1]-a)
         return self.output
 
+    def calculate_error(self):  # for hidden neuron
+        s = self.sigmoid_function()
+
     def sigmoid_function(self, result):
         return 1 / (1 + self.e ** -result)
