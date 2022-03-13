@@ -34,7 +34,7 @@ class NeuronNetwork:
     def calculate_deltas(self):
         delta_lst = []
         self.layers.reverse()
-        o = list(self.layers[0].neurons.keys())[0]  # output neuron
+        o = list(self.layers[0].neurons.keys())[0]  # output neuron ((Maak hier nog van dat het voor elk element in de list werkt))
         for i in range(len(o.w)):  # voor alle weights
             if len(self.layers) != 1:
                 output_i = list(self.layers[1].neurons.keys())[i].output
@@ -43,7 +43,6 @@ class NeuronNetwork:
             gradient = output_i * o.error
             delta_lst.append(self.lr * gradient)
         delta_lst = [delta_lst, self.lr * o.error]
-        self.layers.reverse()
         # print(delta_lst)
         return delta_lst
 
@@ -54,3 +53,4 @@ class NeuronNetwork:
             o.w[i] = o.w[i] - d
         o.b = o.b - deltas[1]
         print(o.w, o.b)
+        self.layers.reverse()
