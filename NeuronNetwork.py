@@ -20,16 +20,23 @@ class NeuronNetwork:
         # event[0]: input, event[1]: target
         if not self.startvalues:
             self.startvalues = event[0]
-        self.layers[self.count].activate(event)
+        self.layers[self.count].activate(event[0])
         self.count += 1
         if self.count < len(self.layers):
             # Go to next layer with values of layer before it.
             self.feed_forward([list(self.layers[self.count-1].neurons.values()), event[1]])
         else:
-            error = self.layers[-1].get_error(0)[-1]  # haal hier de index weg van je voor de adder gaat.
+            self.calculate_errors(event[1])
             deltas = self.calculate_deltas()
             self.update(deltas)
             self.count = 0
+
+    def calculate_errors(self, target):
+        self.layers.reverse()
+        for i, l in enumerate(self.layers):
+            for n in l.neurons:
+                n.calculate_error(i,  target)
+        self.layers.reverse()
 
     def calculate_deltas(self):
         delta_lst = []

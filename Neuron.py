@@ -12,25 +12,21 @@ class Neuron:
     def __str__(self):
         return str(self.error)
 
-    def activate(self, event, output_l=False):
-        # event[0]: input, event[1]: target,  output_l: {False = hidden, True = Output}
+    def activate(self, event):
         som = 0
         for i in range(len(self.w)):
-            som = som + event[0][i] * self.w[i]
+            som = som + event[i] * self.w[i]
         self.output = som + self.b
-        a = self.sigmoid_function(self.output)
-        self.calculate_error(a, event[1], output_l)
+        # self.calculate_error(a, event[1], output_l)
         return self.output
 
-    def calculate_error(self, a, target, output_l):
+    def calculate_error(self, layer,  target):
         # output_l: {False = hidden, True = Output}
-        if output_l == True:
-            self.error = a * (1 - a) * -(target - a)
-        elif output_l == False:
+        a = self.sigmoid_function(self.output)
+        if layer == 0:
             self.error = a * (1 - a) * -(target - a)
         else:
-            print("ERROR!")
-
+            self.error = a * (1 - a) * -(target - a)
 
 
     def sigmoid_function(self, result):
