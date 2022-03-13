@@ -27,7 +27,6 @@ class NeuronNetwork:
             self.feed_forward([list(self.layers[self.count-1].neurons.values()), event[1]])
         else:
             error = self.layers[-1].get_error(0)[-1]  # haal hier de index weg van je voor de adder gaat.
-            # print(error)
             deltas = self.calculate_deltas()
             self.update(deltas)
             self.count = 0

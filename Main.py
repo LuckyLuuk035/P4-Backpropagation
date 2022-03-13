@@ -8,7 +8,7 @@ import random
 print("andGate")
 o = Neuron([-0.5, 0.5], 1.5)  # [-0.5, 0.5], 1.5 OR [1, 1], -1.5
 
-outputLater = NeuronLayer([o])
+outputLater = NeuronLayer([o], True)
 
 andGate = NeuronNetwork([outputLater])
 
@@ -22,7 +22,7 @@ g = Neuron([0.7, 0.1], 0)
 hiddenLayer = NeuronLayer([f, g])
 
 o = Neuron([0.6, 0.9], 0)
-outputLater = NeuronLayer([o])
+outputLater = NeuronLayer([o], True)
 
 xorGate = NeuronNetwork([hiddenLayer, outputLater])
 
