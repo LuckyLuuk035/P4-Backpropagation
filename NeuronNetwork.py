@@ -41,15 +41,17 @@ class NeuronNetwork:
     def calculate_deltas(self):
         delta_lst = []
         self.layers.reverse()
-        o = list(self.layers[0].neurons.keys())[0]  # output neuron ((Maak hier nog van dat het voor elk element in de list werkt))
-        for i in range(len(o.w)):  # voor alle weights
-            if len(self.layers) != 1:
-                output_i = list(self.layers[1].neurons.keys())[i].output
-            else:
-                output_i = self.startvalues[i]
-            gradient = output_i * o.error
-            delta_lst.append(self.lr * gradient)
-        delta_lst = [delta_lst, self.lr * o.error]
+        for i in range(len(self.layers)):
+            n = list(self.layers[i].neurons.keys())
+            for o in n:
+                for j in range(len(o.w)):  # voor alle weights
+                    if i != len(self.layers):
+                        output_i = list(self.layers[i+1].neurons.keys())[j].output
+                    else:
+                        output_i = self.startvalues[j]
+                    gradient = output_i * o.error
+                    delta_lst.append(self.lr * gradient)
+                delta_lst = [delta_lst, self.lr * o.error]
         self.layers.reverse()
         # print(delta_lst)
         return delta_lst
