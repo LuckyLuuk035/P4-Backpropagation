@@ -34,8 +34,8 @@ class NeuronNetwork:
     def calculate_errors(self, target):
         self.layers.reverse()
         for i, l in enumerate(self.layers):
-            for n in l.neurons:
-                n.calculate_error(i,  target)
+            for j, n in enumerate(l.neurons):
+                n.calculate_error(i, self.layers[i-1], target, j)
         self.layers.reverse()
 
     def calculate_deltas(self):
@@ -50,10 +50,12 @@ class NeuronNetwork:
             gradient = output_i * o.error
             delta_lst.append(self.lr * gradient)
         delta_lst = [delta_lst, self.lr * o.error]
+        self.layers.reverse()
         # print(delta_lst)
         return delta_lst
 
     def update(self, deltas):
+        self.layers.reverse()
         # deltas[0]: delta's for the weights, deltas[1]: delta for bias
         o = list(self.layers[0].neurons.keys())[0]  # output neuron
         for i, d in enumerate(deltas[0]):
