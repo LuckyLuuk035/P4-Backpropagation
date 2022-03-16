@@ -27,7 +27,6 @@ class Neuron:
             self.error = self.a * (1 - self.a) * -(target - self.a)
         else:
             self.a = self.sigmoid_function(sum(self.w))
-            print(self.a)
             for n in layer.neurons:
                 self.error = 0
                 self.error += self.a * (1 - self.a) * n.w[weight] * n.error

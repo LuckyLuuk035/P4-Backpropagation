@@ -6,7 +6,7 @@ class NeuronNetwork:
         self.layers = layers
         self.count = 0
         self.error = None
-        self.startvalues = None # output van input neurons
+        self.startvalues = None  # output van input neurons
         self.lr = 1  # learningrate
         self.msg = ""
 
@@ -15,6 +15,10 @@ class NeuronNetwork:
         for output in self.layers[-1].neurons.values():
             self.msg += str(output) + "\n"
         return self.msg
+
+    def train(self, inputs, targets, epochs=100):
+        for i in epochs:
+
 
     def feed_forward(self, event):
         # event[0]: input, event[1]: target
@@ -29,6 +33,7 @@ class NeuronNetwork:
             self.calculate_errors(event[1])
             deltas = self.calculate_deltas()
             self.update(deltas)
+            self.startvalues = None
             self.count = 0
 
     def calculate_errors(self, target):
@@ -40,28 +45,31 @@ class NeuronNetwork:
 
     def calculate_deltas(self):
         delta_lst = []
+
         self.layers.reverse()
-        for i in range(len(self.layers)):
-            n = list(self.layers[i].neurons.keys())
-            for o in n:
-                for j in range(len(o.w)):  # voor alle weights
-                    if i != len(self.layers):
-                        output_i = list(self.layers[i+1].neurons.keys())[j].output
+        for i, l in enumerate(self.layers):
+            layer_deltas = []
+            weight_deltas = []
+            for n in list(l.neurons.keys()):
+                weight_deltas = []
+                for j, w in enumerate(n.w):  # voor alle weights
+                    if i == len(self.layers)-1:
+                        a = self.startvalues[j]
                     else:
-                        output_i = self.startvalues[j]
-                    gradient = output_i * o.error
-                    delta_lst.append(self.lr * gradient)
-                delta_lst = [delta_lst, self.lr * o.error]
+                        a = list(self.layers[i+1].neurons.keys())[j].a
+                    gradient = a * n.error
+                    weight_deltas.append(self.lr * gradient)
+                bias_delta = self.lr * n.error
+                layer_deltas.append([weight_deltas, bias_delta])
+            delta_lst.append(layer_deltas)
         self.layers.reverse()
-        # print(delta_lst)
         return delta_lst
 
     def update(self, deltas):
         self.layers.reverse()
-        # deltas[0]: delta's for the weights, deltas[1]: delta for bias
-        o = list(self.layers[0].neurons.keys())[0]  # output neuron
-        for i, d in enumerate(deltas[0]):
-            o.w[i] = o.w[i] - d
-        o.b = o.b - deltas[1]
-        print(o.w, o.b)
+        for i, l in enumerate(self.layers):  # network
+            for j, n in enumerate(list(l.neurons.keys())):  # layer
+                for k, d in enumerate(deltas[i][j][0]):  # neuron
+                    n.w[k] = n.w[k] - d
+                n.b = n.b - deltas[i][j][1]
         self.layers.reverse()
