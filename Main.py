@@ -12,10 +12,7 @@ outputLater = NeuronLayer([o])
 
 andGate = NeuronNetwork([outputLater])
 
-andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], 10)
-
-# for i in [[[0, 0], 0], [[1, 0], 0], [[0, 1], 0], [[1, 1], 1]]:
-#     andGate.feed_forward(i)
+andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], None, 0.005)
 
 print("xorGate")
 
