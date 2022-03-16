@@ -7,7 +7,7 @@ class NeuronNetwork:
         self.count = 0
         self.total_loss = float('inf')
         self.startvalues = None  # output van input neurons
-        self.lr = 1  # learningrate
+        self.lr = 0.1  # learningrate
 
     def __str__(self):
         msg = ""
@@ -18,16 +18,21 @@ class NeuronNetwork:
 
     def train(self, inputs, targets, epochs=None, loss=None):
         if epochs:
+            self.total_loss = 0
             for i in range(epochs):
                 for j, k in enumerate(inputs):
                     self.feed_forward([k, targets[j]])
+                    self.get_total_loss(targets[j])
+                self.get_total_loss(targets)
                 print("epoch: " + str(i+1) + "\n" + str(self))
         elif loss:
+            counter = 1
             while self.total_loss > loss:
-                counter = 1
-                self.get_total_loss(targets)
+                self.total_loss = 0
                 for j, k in enumerate(inputs):
                     self.feed_forward([k, targets[j]])
+                    self.get_total_loss(targets[j])
+                self.get_total_loss(targets)
                 print("epoch: " + str(counter) + "\n" + str(self))
                 counter += 1
 
@@ -36,6 +41,7 @@ class NeuronNetwork:
         if not self.startvalues:
             self.startvalues = event[0]
         self.layers[self.count].activate(event[0])
+
         self.count += 1
         if self.count < len(self.layers):
             # Go to next layer with values of layer before it.
@@ -47,9 +53,11 @@ class NeuronNetwork:
             self.startvalues = None
             self.count = 0
 
-    def get_total_loss(self):
-        self.layers[0].neurons[0].a
-
+    def get_total_loss(self, target):
+        if type(target) == list:
+            self.total_loss = self.total_loss / (2 * len(target))
+        else:
+            self.total_loss += target - list(self.layers[0].neurons.keys())[0].a ** 2
 
     def calculate_errors(self, target):
         self.layers.reverse()
