@@ -5,20 +5,31 @@ class NeuronNetwork:
     def __init__(self, layers):
         self.layers = layers
         self.count = 0
-        self.error = None
+        self.total_loss = float('inf')
         self.startvalues = None  # output van input neurons
         self.lr = 1  # learningrate
-        self.msg = ""
 
     def __str__(self):
-        self.msg = ""
-        for output in self.layers[-1].neurons.values():
-            self.msg += str(output) + "\n"
-        return self.msg
+        msg = ""
+        for i, l in enumerate(self.layers):
+            msg += str(i) + " " + str(l) + "\n"
+        msg += "total loss: " + str(self.total_loss) + "\n"
+        return msg
 
-    def train(self, inputs, targets, epochs=100):
-        for i in epochs:
-
+    def train(self, inputs, targets, epochs=None, loss=None):
+        if epochs:
+            for i in range(epochs):
+                for j, k in enumerate(inputs):
+                    self.feed_forward([k, targets[j]])
+                print("epoch: " + str(i+1) + "\n" + str(self))
+        elif loss:
+            while self.total_loss > loss:
+                counter = 1
+                self.get_total_loss(targets)
+                for j, k in enumerate(inputs):
+                    self.feed_forward([k, targets[j]])
+                print("epoch: " + str(counter) + "\n" + str(self))
+                counter += 1
 
     def feed_forward(self, event):
         # event[0]: input, event[1]: target
@@ -36,6 +47,10 @@ class NeuronNetwork:
             self.startvalues = None
             self.count = 0
 
+    def get_total_loss(self):
+        self.layers[0].neurons[0].a
+
+
     def calculate_errors(self, target):
         self.layers.reverse()
         for i, l in enumerate(self.layers):
@@ -45,11 +60,9 @@ class NeuronNetwork:
 
     def calculate_deltas(self):
         delta_lst = []
-
         self.layers.reverse()
         for i, l in enumerate(self.layers):
             layer_deltas = []
-            weight_deltas = []
             for n in list(l.neurons.keys()):
                 weight_deltas = []
                 for j, w in enumerate(n.w):  # voor alle weights

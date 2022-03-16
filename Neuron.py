@@ -11,7 +11,11 @@ class Neuron:
         self.error = None
 
     def __str__(self):
-        return str(self.error)
+        msg = "{ w[ "
+        for i in self.w:
+            msg += str(i) + " "
+        msg += "] b" + str(self.b) + " }"
+        return msg
 
     def activate(self, event):
         som = 0
