@@ -1,4 +1,4 @@
-from NeuronLayer import NeuronLayer
+import time
 
 
 class NeuronNetwork:
@@ -8,27 +8,27 @@ class NeuronNetwork:
         # self.total_loss = float('inf')
         # self.temp_loss = 0
         self.startvalues = None  # output van input neurons
-        self.lr = 0.1  # learningrate
+        self.lr = 1  # learningrate
 
     def __str__(self):
         msg = ""
         for i, l in enumerate(self.layers):
             msg += str(i) + " " + str(l) + "\n"
-        msg += "total loss: " + str(self.total_loss) + "\n"
+        # msg += "total loss: " + str(self.total_loss) + "\n"
         return msg
 
-    def train(self, inputs, targets, epochs=None, loss=None):
-        if epochs:
+    def train(self, inputs, targets, stopconditie):
+        if stopconditie[0] == "epochs":
             self.total_loss = 0
-            for i in range(epochs):
+            for i in range(stopconditie[1]):
                 for j, k in enumerate(inputs):
                     self.feed_forward([k, targets[j]])
                 #     self.get_total_loss(targets[j])
                 # self.get_total_loss(targets)
                 print("epoch: " + str(i+1) + "\n" + str(self))
-        elif loss:
+        elif stopconditie[0] == "loss":
             counter = 1
-            while self.total_loss > loss:
+            while self.total_loss > stopconditie[1]:
                 self.total_loss = 0
                 for j, k in enumerate(inputs):
                     self.feed_forward([k, targets[j]])
@@ -36,6 +36,14 @@ class NeuronNetwork:
                 # self.get_total_loss(targets)
                 print("epoch: " + str(counter) + "\n" + str(self))
                 counter += 1
+        elif stopconditie[0] == "time":
+            start_time = time.time()
+            while (time.time() - start_time) < stopconditie[1]:
+                for j, k in enumerate(inputs):
+                    self.feed_forward([k, targets[j]])
+                    print("time left: " + str(round(stopconditie[1] - (time.time() - start_time), 3)) + "\n"+str(self))
+        else:
+            print("stopconditie '" + str(stopconditie[0]) + "' not recognized")
 
     def feed_forward(self, event):
         # event[0]: input, event[1]: target

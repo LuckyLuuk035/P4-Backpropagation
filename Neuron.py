@@ -11,10 +11,15 @@ class Neuron:
         self.error = None
 
     def __str__(self):
-        msg = "{ w[ "
+        msg = "{ w["
         for i in self.w:
-            msg += str(i) + " "
-        msg += "] b" + str(self.b) + " }"
+            if i > 0:
+                msg += " "
+            msg += str(round(i, 3)) + " "
+        msg += "] b"
+        if self.b > 0:
+            msg += " "
+        msg += str(round(self.b, 3)) + " }"
         return msg
 
     def activate(self, event):
