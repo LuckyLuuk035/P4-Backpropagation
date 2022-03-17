@@ -12,15 +12,12 @@ outputLater = NeuronLayer([o])
 
 andGate = NeuronNetwork([outputLater])
 
-# andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 60])
+andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 5])
 
 print("xorGate")
 
 f = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
 g = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
-
-# f = Neuron([0.2, -0.4], 0)
-# g = Neuron([0.7, 0.1], 0)
 
 hiddenLayer = NeuronLayer([f, g])
 
@@ -29,4 +26,20 @@ outputLater = NeuronLayer([o])
 
 xorGate = NeuronNetwork([hiddenLayer, outputLater])
 
-# xorGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 1, 1, 0], 100)
+xorGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 1, 1, 0], ["time", 5])
+
+h = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
+i = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
+
+hiddenLayer = NeuronLayer([h, i])
+
+j = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
+k = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
+
+outputLater = NeuronLayer([j, k])
+
+halfAdder = NeuronNetwork([hiddenLayer, outputLater])
+
+halfAdder.train([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 0], [1, 1]], ["epochs", 1000])
+
+print(halfAdder.feed_forward([[1, 1], [1, 1]]))

@@ -29,15 +29,19 @@ class Neuron:
         self.output = som + self.b
         return self.output
 
-    def calculate_error(self, i, layer, target, weight):
-        # output_l: {False = hidden, True = Output}
+    def calculate_error(self, i, network, target, weight):
         if i == 0:
+            self.error = 0
             self.a = self.sigmoid_function(self.output)
-            self.error = self.a * (1 - self.a) * -(target - self.a)
+            if type(target) == list:
+                for j in range(len(network.layers[0].neurons)):
+                    self.error += self.a * (1 - self.a) * -(target[j] - self.a)
+            else:
+                self.error += self.a * (1 - self.a) * -(target - self.a)
         else:
+            self.error = 0
             self.a = self.sigmoid_function(sum(self.w))
-            for n in layer.neurons:
-                self.error = 0
+            for n in network.layers[i-1].neurons:
                 self.error += self.a * (1 - self.a) * n.w[weight] * n.error
 
     def sigmoid_function(self, result):

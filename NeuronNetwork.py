@@ -62,19 +62,11 @@ class NeuronNetwork:
             self.startvalues = None
             self.count = 0
 
-    # def get_total_loss(self, target):
-    #     print("hey")
-    #     if type(target) == list:
-    #         self.total_loss = self.temp_loss / (2 * len(target))
-    #         print("Hoi")
-    #     else:
-    #         self.temp_loss += target - list(self.layers[0].neurons.keys())[0].a ** 2
-
     def calculate_errors(self, target):
         self.layers.reverse()
         for i, l in enumerate(self.layers):
             for j, n in enumerate(l.neurons):
-                n.calculate_error(i, self.layers[i-1], target, j)
+                n.calculate_error(i, self, target, j)
         self.layers.reverse()
 
     def calculate_deltas(self):
