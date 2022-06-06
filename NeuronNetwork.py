@@ -6,8 +6,8 @@ class NeuronNetwork:
         self.layers = layers
         self.count = 0
         self.total_loss = 0
-        self.startvalues = None  # output van input neurons
-        self.lr = 1  # learningrate
+        self.start_values = None  # output van input neurons
+        self.lr = 0.2  # learningrate
 
     def __str__(self):
         msg = ""
@@ -16,16 +16,18 @@ class NeuronNetwork:
         # msg += "total loss: " + str(self.total_loss) + "\n"
         return msg
 
-    def train(self, inputs, targets, stopconditie):
+    def train(self, inputs, targets, stopconditie, learning_rate=None):
         epochs = 0
         start_time = time.time()
+        if learning_rate:
+            self.lr = learning_rate
         while self.check_stop(stopconditie, epochs, start_time):
             for count, inp in enumerate(inputs):
                 self.feed_forward(inp)
                 self.calculate_errors(targets[count])
                 deltas = self.calculate_deltas()
                 self.update(deltas)
-                self.startvalues = None
+                self.start_values = None
             epochs += 1
             if stopconditie[0] == "time":
                 print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" +
@@ -46,8 +48,8 @@ class NeuronNetwork:
 
     def feed_forward(self, event):
         # event[0]: input, event[1]: target
-        if not self.startvalues:
-            self.startvalues = event
+        if not self.start_values:
+            self.start_values = event
         self.layers[self.count].activate(event)
 
         self.count += 1
@@ -73,7 +75,7 @@ class NeuronNetwork:
                 weight_deltas = []
                 for count, w in enumerate(n.w):  # voor alle weights
                     if i == len(self.layers) - 1:
-                        a = self.startvalues[count]
+                        a = self.start_values[count]
                     else:
                         a = self.layers[i + 1].neurons[count].a
                     gradient = a * n.error
