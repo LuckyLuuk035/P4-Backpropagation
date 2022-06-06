@@ -5,8 +5,7 @@ class NeuronNetwork:
     def __init__(self, layers):
         self.layers = layers
         self.count = 0
-        # self.total_loss = float('inf')
-        # self.temp_loss = 0
+        self.total_loss = 0
         self.startvalues = None  # output van input neurons
         self.lr = 1  # learningrate
 
@@ -18,55 +17,51 @@ class NeuronNetwork:
         return msg
 
     def train(self, inputs, targets, stopconditie):
-        if stopconditie[0] == "epochs":
-            self.total_loss = 0
-            for i in range(stopconditie[1]):
-                for j, k in enumerate(inputs):
-                    self.feed_forward([k, targets[j]])
-                #     self.get_total_loss(targets[j])
-                # self.get_total_loss(targets)
-                print("epoch: " + str(i+1) + "\n" + str(self))
-        elif stopconditie[0] == "loss":
-            counter = 1
-            while self.total_loss > stopconditie[1]:
-                self.total_loss = 0
-                for j, k in enumerate(inputs):
-                    self.feed_forward([k, targets[j]])
-                #     self.get_total_loss(targets[j])
-                # self.get_total_loss(targets)
-                print("epoch: " + str(counter) + "\n" + str(self))
-                counter += 1
-        elif stopconditie[0] == "time":
-            start_time = time.time()
-            while (time.time() - start_time) < stopconditie[1]:
-                for j, k in enumerate(inputs):
-                    self.feed_forward([k, targets[j]])
-                    print("time left: " + str(round(stopconditie[1] - (time.time() - start_time), 3)) + "\n"+str(self))
+        epochs = 0
+        start_time = time.time()
+        while self.check_stop(stopconditie, epochs, start_time):
+            for count, inp in enumerate(inputs):
+                self.feed_forward(inp)
+                self.calculate_errors(targets[count])
+                deltas = self.calculate_deltas()
+                self.update(deltas)
+                self.startvalues = None
+            epochs += 1
+            if stopconditie[0] == "time":
+                print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" +
+                      " | time left: " + str(round(stopconditie[1] - (time.time() - start_time), 3)) + "\n" + str(
+                    self))
+            else:
+                print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" + str(self))
+
+    def check_stop(self, stopconditie, epochs, start_time):
+        if stopconditie[0] == "epochs" and stopconditie[1] > epochs:
+            return True  # Continue
+        elif stopconditie[0] == "loss" and stopconditie[1] < self.total_loss:
+            return True  # Continue
+        elif stopconditie[0] == "time" and stopconditie[1] > (time.time() - start_time):
+            return True  # Continue
         else:
-            print("stopconditie '" + str(stopconditie[0]) + "' not recognized")
+            return False  # Stop
 
     def feed_forward(self, event):
         # event[0]: input, event[1]: target
         if not self.startvalues:
-            self.startvalues = event[0]
-        self.layers[self.count].activate(event[0])
+            self.startvalues = event
+        self.layers[self.count].activate(event)
 
         self.count += 1
         if self.count < len(self.layers):
             # Go to next layer with values of layer before it.
-            self.feed_forward([list(self.layers[self.count-1].neurons.values()), event[1]])
+            self.feed_forward(self.layers[self.count - 1].getOutput())
         else:
-            self.calculate_errors(event[1])
-            deltas = self.calculate_deltas()
-            self.update(deltas)
-            self.startvalues = None
             self.count = 0
 
     def calculate_errors(self, target):
         self.layers.reverse()
         for i, l in enumerate(self.layers):
-            for j, n in enumerate(l.neurons):
-                n.calculate_error(i, self, target, j)
+            for count, n in enumerate(l.neurons):
+                n.calculate_error(i, self, target, count)
         self.layers.reverse()
 
     def calculate_deltas(self):
@@ -74,13 +69,13 @@ class NeuronNetwork:
         self.layers.reverse()
         for i, l in enumerate(self.layers):
             layer_deltas = []
-            for n in list(l.neurons.keys()):
+            for n in l.neurons:
                 weight_deltas = []
-                for j, w in enumerate(n.w):  # voor alle weights
-                    if i == len(self.layers)-1:
-                        a = self.startvalues[j]
+                for count, w in enumerate(n.w):  # voor alle weights
+                    if i == len(self.layers) - 1:
+                        a = self.startvalues[count]
                     else:
-                        a = list(self.layers[i+1].neurons.keys())[j].a
+                        a = self.layers[i + 1].neurons[count].a
                     gradient = a * n.error
                     weight_deltas.append(self.lr * gradient)
                 bias_delta = self.lr * n.error
@@ -92,8 +87,8 @@ class NeuronNetwork:
     def update(self, deltas):
         self.layers.reverse()
         for i, l in enumerate(self.layers):  # network
-            for j, n in enumerate(list(l.neurons.keys())):  # layer
-                for k, d in enumerate(deltas[i][j][0]):  # neuron
+            for count, n in enumerate(l.neurons):  # layer
+                for k, d in enumerate(deltas[i][count][0]):  # neuron
                     n.w[k] = n.w[k] - d
-                n.b = n.b - deltas[i][j][1]
+                n.bias = n.bias - deltas[i][count][1]
         self.layers.reverse()

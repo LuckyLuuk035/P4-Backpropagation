@@ -1,11 +1,9 @@
 class NeuronLayer:
     def __init__(self, neurons):
-        self.neurons = {}
-        for n in neurons:
-            self.neurons[n] = None  # Value: output
+        self.neurons = neurons
 
     def __str__(self):
-        msg = "| | "
+        msg = " | "
         for n in self.neurons:
             msg += str(n) + " | "
         msg += "|"
@@ -13,4 +11,7 @@ class NeuronLayer:
 
     def activate(self, event):
         for n in self.neurons:
-            self.neurons[n] = n.activate(event)
+            n.activate(event)
+
+    def getOutput(self):
+        return [i.output for i in self.neurons]
