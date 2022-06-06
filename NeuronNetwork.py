@@ -13,10 +13,9 @@ class NeuronNetwork:
         msg = ""
         for i, l in enumerate(self.layers):
             msg += str(i) + " " + str(l) + "\n"
-        # msg += "total loss: " + str(self.total_loss) + "\n"
         return msg
 
-    def train(self, inputs, targets, stopconditie, learning_rate=None):
+    def train(self, inputs, targets, stopconditie, learning_rate=None, print_=True):
         epochs = 0
         start_time = time.time()
         if learning_rate:
@@ -29,12 +28,13 @@ class NeuronNetwork:
                 self.update(deltas)
                 self.start_values = None
             epochs += 1
-            if stopconditie[0] == "time":
-                print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" +
-                      " | time left: " + str(round(stopconditie[1] - (time.time() - start_time), 3)) + "\n" + str(
-                    self))
-            else:
-                print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" + str(self))
+            if print_:
+                if stopconditie[0] == "time":
+                    print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" +
+                          " | time left: " + str(round(stopconditie[1] - (time.time() - start_time), 3)) + "\n" + str(
+                        self))
+                else:
+                    print("epoch: " + str(epochs) + " | total loss: " + str(round(self.total_loss, 3)) + "\n" + str(self))
 
     def check_stop(self, stopconditie, epochs, start_time):
         if stopconditie[0] == "epochs" and stopconditie[1] > epochs:
@@ -50,7 +50,7 @@ class NeuronNetwork:
         # event[0]: input, event[1]: target
         if not self.start_values:
             self.start_values = event
-        self.layers[self.count].activate(event)
+        output = self.layers[self.count].activate(event)
 
         self.count += 1
         if self.count < len(self.layers):
@@ -58,6 +58,12 @@ class NeuronNetwork:
             self.feed_forward(self.layers[self.count - 1].getOutput())
         else:
             self.count = 0
+            for c, i in enumerate(output):
+                if i > 0:
+                    output[c] = 1
+                else:
+                    output[c] = 0
+            return output
 
     def calculate_errors(self, target):
         self.layers.reverse()
