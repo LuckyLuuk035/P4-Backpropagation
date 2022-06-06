@@ -1,18 +1,18 @@
+import unittest
+
 from Neuron import Neuron
 from NeuronLayer import NeuronLayer
 from NeuronNetwork import NeuronNetwork
+from test_NeuronNetwork import TestNeuronNetwork
 import random
 
-# onderstaande gegevens zijn op basis van de uitwerkingen van les 6.
+print("AndGate")
+o = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)],
+           random.uniform(-1, 1))  # [-0.5, 0.5], 1.5 OR [1, 1], -1.5
+output_later = NeuronLayer([o])
+and_gate = NeuronNetwork([output_later])
 
-print("andGate")
-o = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))  # [-0.5, 0.5], 1.5 OR [1, 1], -1.5
-
-outputLater = NeuronLayer([o])
-
-andGate = NeuronNetwork([outputLater])
-
-andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 5])
+and_gate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 5])
 
 print("xorGate")
 
@@ -41,3 +41,11 @@ outputLater = NeuronLayer([j, k])
 halfAdder = NeuronNetwork([hiddenLayer, outputLater])
 
 halfAdder.train([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 0], [0, 1]], ["epochs", 1000])
+
+TestNeuronNetwork()
+
+# if __name__ == '__main__':
+#     # unittest.main()
+#
+#     testsuite = unittest.TestLoader().discover('.')
+#     unittest.TextTestRunner(verbosity=1).run(testsuite)

@@ -2,7 +2,7 @@ from Neuron import Neuron
 
 
 class NeuronLayer:
-    def __init__(self, neurons=None):
+    def __init__(self, neurons):
         self.neurons = neurons
 
     def __str__(self):
