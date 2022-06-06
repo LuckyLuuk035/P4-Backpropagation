@@ -12,7 +12,7 @@ outputLater = NeuronLayer([o])
 
 andGate = NeuronNetwork([outputLater])
 
-andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 5])
+# andGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 0, 0, 1], ["time", 5])
 
 print("xorGate")
 
@@ -26,7 +26,7 @@ outputLater = NeuronLayer([o])
 
 xorGate = NeuronNetwork([hiddenLayer, outputLater])
 
-xorGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 1, 1, 0], ["time", 5])
+# xorGate.train([[0, 0], [1, 0], [0, 1], [1, 1]], [0, 1, 1, 0], ["time", 5])
 
 h = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
 i = Neuron([random.uniform(-1, 1), random.uniform(-1, 1)], random.uniform(-1, 1))
@@ -40,6 +40,6 @@ outputLater = NeuronLayer([j, k])
 
 halfAdder = NeuronNetwork([hiddenLayer, outputLater])
 
-halfAdder.train([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 0], [1, 1]], ["epochs", 1000])
+halfAdder.train([[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 0], [0, 1]], ["epochs", 1000])
 
 print(halfAdder.feed_forward([[1, 1], [1, 1]]))
